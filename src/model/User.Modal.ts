@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 
+
 export interface Message extends Document {
     content: string;
     createdAt: Date;
@@ -11,6 +12,7 @@ export interface User extends Document {
     password: string;
     verifyCode: string;
     verifyCodeExpire: Date;
+    isVerified: boolean;
     isAcceptingMessage: boolean;
     message: Message[];
 }
@@ -36,11 +38,15 @@ const UserSchema: Schema<User> = new Schema({
     },
     password: {
         type: String,
-        required: true
+        required: [true, "Password is required"]
     },
     verifyCode: {
         type: String,
-        required: true
+        required: [true, "Verify code is required"]
+    },
+    isVerified: {
+        type: Boolean,
+        required: [true, "isVerified is required"],
     },
     verifyCodeExpire: {
         type: Date,
@@ -54,7 +60,7 @@ const UserSchema: Schema<User> = new Schema({
     message: [MessageSchema]
 })
 
-const MessageModel = mongoose.model<Message>("Message", MessageSchema);
-const UserModel = mongoose.model<User>("User", UserSchema);
+const MessageModel = (mongoose.models.UserModel as mongoose.Model<Message>) || mongoose.model<Message>("Message", MessageSchema);
+const UserModel = (mongoose.models.UserModel as mongoose.Model<User>) || mongoose.model<User>("User", UserSchema);
 
-export { MessageModel, UserModel }
+export { UserModel, MessageModel }
