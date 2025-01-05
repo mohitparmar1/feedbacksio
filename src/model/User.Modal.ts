@@ -6,6 +6,7 @@ export interface Message extends Document {
 }
 
 export interface User extends Document {
+    username: string;
     email: string;
     password: string;
     verifyCode: string;
@@ -58,7 +59,8 @@ const UserSchema: Schema<User> = new Schema({
     message: [MessageSchema]
 })
 
-const MessageModel = (mongoose.models.UserModel as mongoose.Model<Message>) || mongoose.model<Message>("Message", MessageSchema);
-const UserModel = (mongoose.models.UserModel as mongoose.Model<User>) || mongoose.model<User>("User", UserSchema);
+const MessageModel = (mongoose.models.Message as mongoose.Model<Message>) || mongoose.model<Message>("Message", MessageSchema);
+const UserModel = (mongoose.models.User as mongoose.Model<User>) || mongoose.model<User>("User", UserSchema);
+
 
 export { UserModel, MessageModel }

@@ -13,11 +13,7 @@ export const dbConnect = async () => {
     }
     try {
         const db = await mongoose.connect(process.env.MONGO_URI || "", {})
-
-        console.log(db);
-
         connection.isConnected = db.connections[0].readyState;
-        console.log(connections);
         console.log("Connected to database");
     } catch (error) {
         throw new Error("Error in connecting to database");

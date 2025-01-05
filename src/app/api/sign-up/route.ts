@@ -49,6 +49,7 @@ export async function POST(request: Request) {
             expiryDate.setHours(expiryDate.getHours() + 1);
 
             const newUser = new UserModel({
+                username,
                 email,
                 password: hashPassword,
                 verifyCode: verifyCode,
@@ -61,8 +62,8 @@ export async function POST(request: Request) {
         }
 
         const emailResponse = await sendVerificationEmail(
-            email,
             username,
+            email,
             verifyCode
         );
         if (!emailResponse.success) {
