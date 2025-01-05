@@ -25,11 +25,10 @@ export async function sendVerificationEmail(
         )
     } catch (error) {
         console.error("Error in sending verification email", error);
-        const errorMessage = error.message || "Error in sending verification email";
         return (
             {
                 success: false,
-                message: errorMessage
+                message: "failed to send verification email"
             }
         )
     }

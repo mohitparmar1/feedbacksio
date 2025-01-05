@@ -55,7 +55,6 @@ export default function VerificationEmail({
             if you didn&apos;t request this code, please ignore this email.
           </Text>
         </Row>
-        {verfi}
       </Section>
     </Html>
   );
