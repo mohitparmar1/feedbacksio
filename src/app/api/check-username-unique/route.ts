@@ -30,7 +30,8 @@ export async function GET(request: Request) {
             })
         }
 
-        const username = result.data;
+        const { username } = result.data;
+        console.log(result.data.username)
 
         const existingVerified = await UserModel.findOne({ username, isVerified: true })
 

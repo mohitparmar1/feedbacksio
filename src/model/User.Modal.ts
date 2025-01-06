@@ -29,6 +29,11 @@ const MessageSchema: Schema<Message> = new Schema({
 })
 
 const UserSchema: Schema<User> = new Schema({
+    username: {
+        type: String,
+        unique: true,
+        required: [true, "username is required"]
+    },
     email: {
         type: String,
         required: [true, "Email is required"],
