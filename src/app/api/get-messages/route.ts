@@ -41,17 +41,19 @@ export async function GET(request: Request) {
         if (!user || user.length === 0) {
             return Response.json({
                 success: false,
-                message: "User not found"
+                message: "User not found",
+                data: null
             }, {
-                status: 401
+                status: 4014
             })
         }
 
         return Response.json({
-            success :true,
-            messages : user[0].message
-        },{
-            status:200
+            success: true,
+            messages: "messages retrived successfully",
+            data: user[0].message
+        }, {
+            status: 200
         })
     } catch (error) {
         console.error("An unexpected error occured at get message", error)
