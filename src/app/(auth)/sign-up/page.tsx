@@ -128,7 +128,7 @@ export default function SignUpForm() {
                   {!isCheckingUsername && usernameMessage && (
                     <p
                       className={`text-sm ${
-                        usernameMessage === 'Username is unique'
+                        usernameMessage === 'username is unique'
                           ? 'text-green-500'
                           : 'text-red-500'
                       }`}
