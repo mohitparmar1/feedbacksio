@@ -17,9 +17,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { signInSchema } from '@/schemas/signInSchema';
+signInSchema
+
 
 export default function SignInForm() {
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -29,32 +32,46 @@ export default function SignInForm() {
     },
   });
 
-  const { toast } = useToast();
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    const result = await signIn('credentials', {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password,
-    });
+    try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        identifier: data.identifier,
+        password: data.password,
+      });
 
-    if (result?.error) {
-      if (result.error === 'CredentialsSignin') {
+      if (!result) {
+        toast({
+          title: 'Sign In Failed',
+          description: 'Unexpected error occurred.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (result.error) {
+        const errorMessage =
+          result.error === 'CredentialsSignin'
+            ? 'Incorrect username or password'
+            : result.error || 'Something went wrong.';
         toast({
           title: 'Login Failed',
-          description: 'Incorrect username or password',
+          description: errorMessage,
           variant: 'destructive',
         });
-      } else {
-        toast({
-          title: 'Error',
-          description: result.error,
-          variant: 'destructive',
-        });
+        return;
       }
-    }
 
-    if (result?.url) {
-      router.replace('/dashboard');
+      if (result.ok) {
+        router.replace('/dashboard');
+      }
+    } catch (error) {
+      console.error('Error occurred while signing in', error);
+      toast({
+        title: 'Error',
+        description: 'An unexpected error occurred. Please try again later.',
+        variant: 'destructive',
+      });
     }
   };
 
@@ -62,7 +79,7 @@ export default function SignInForm() {
     <div className="flex justify-center items-center min-h-screen bg-gray-800">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
-          <h1 className="text-2xl font-extrabold tracking-tight lg:text-2xl mb-6">
+          <h1 className="text-2xl font-extrabold tracking-tight lg:text-2xl mb-2 text-slate-700">
             Seekfeedbacks io
           </h1>
           <p className="mb-4">Sign in to continue your secret conversations</p>
@@ -91,7 +108,9 @@ export default function SignInForm() {
                 </FormItem>
               )}
             />
-            <Button className='w-full' type="submit">Sign In</Button>
+            <Button className="w-full" type="submit">
+              Sign In
+            </Button>
           </form>
         </Form>
         <div className="text-center mt-4">
