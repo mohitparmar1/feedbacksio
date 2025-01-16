@@ -17,12 +17,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { signInSchema } from '@/schemas/signInSchema';
-signInSchema
 
 
 export default function SignInForm() {
   const router = useRouter();
-  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -32,6 +30,7 @@ export default function SignInForm() {
     },
   });
 
+  const { toast } = useToast();
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     try {
       const result = await signIn('credentials', {
