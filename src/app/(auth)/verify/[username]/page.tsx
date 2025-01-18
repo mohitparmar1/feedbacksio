@@ -38,7 +38,7 @@ export default function VerifyAccount() {
 
         router.replace('/sign-in')
     } catch (error) {
-        console.error("Error while verifying account code")
+        console.error("Error while verifying account code",error)
 
         const axiosError = error as AxiosError<ApiResponse>
 

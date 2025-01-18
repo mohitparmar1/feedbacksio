@@ -1,23 +1,22 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { signIn } from 'next-auth/react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { signIn } from "next-auth/react";
 import {
   Form,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { signInSchema } from '@/schemas/signInSchema';
-
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { signInSchema } from "@/schemas/signInSchema";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -25,51 +24,51 @@ export default function SignInForm() {
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      identifier: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
   const { toast } = useToast();
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         redirect: false,
-        identifier: data.identifier,
+        email: data.email,
         password: data.password,
       });
 
       if (!result) {
         toast({
-          title: 'Sign In Failed',
-          description: 'Unexpected error occurred.',
-          variant: 'destructive',
+          title: "Sign In Failed",
+          description: "Unexpected error occurred.",
+          variant: "destructive",
         });
         return;
       }
 
       if (result.error) {
         const errorMessage =
-          result.error === 'CredentialsSignin'
-            ? 'Incorrect username or password'
-            : result.error || 'Something went wrong.';
+          result.error === "CredentialsSignin"
+            ? "Incorrect username or password"
+            : result.error || "Something went wrong.";
         toast({
-          title: 'Login Failed',
+          title: "Login Failed",
           description: errorMessage,
-          variant: 'destructive',
+          variant: "destructive",
         });
         return;
       }
 
       if (result.ok) {
-        router.replace('/dashboard');
+        router.replace("/dashboard");
       }
     } catch (error) {
-      console.error('Error occurred while signing in', error);
+      console.error("Error occurred while signing in", error);
       toast({
-        title: 'Error',
-        description: 'An unexpected error occurred. Please try again later.',
-        variant: 'destructive',
+        title: "Error",
+        description: "An unexpected error occurred. Please try again later.",
+        variant: "destructive",
       });
     }
   };
@@ -114,7 +113,7 @@ export default function SignInForm() {
         </Form>
         <div className="text-center mt-4">
           <p>
-            Not a member yet?{' '}
+            Not a member yet?{" "}
             <Link href="/sign-up" className="text-blue-600 hover:text-blue-800">
               Sign up
             </Link>

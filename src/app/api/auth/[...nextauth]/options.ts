@@ -13,53 +13,69 @@ export const authOptions: NextAuthOptions = {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials: Record<"email" | "password", string> | undefined): Promise<any> {
-                if (!credentials) throw new Error("No credentials provided");
+            async authorize(credentials) {
+                if (!credentials?.email || !credentials?.password) {
+                    throw new Error("Email and password required");
+                }
+
                 try {
                     await dbConnect();
 
                     const user = await UserModel.findOne({
-                        $or: [{
-                            email: credentials.email,
-                        }, { username: credentials.email, }]
-                    })
+                        $or: [
+                            { email: credentials.email },
+                            { username: credentials.email }
+                        ]
+                    });
+
                     if (!user) {
-                        throw new Error("no user found with this email")
+                        throw new Error("No user found with this email");
                     }
+
                     if (!user.isVerified) {
-                        throw new Error("please verify your account before login")
+                        throw new Error("Please verify your account before login");
                     }
-                    const isPasswordMatch = await bcrypt.compare(credentials.password, user.password)
-                    if (isPasswordMatch) {
-                        return user
-                    } else {
-                        throw new Error("Incorrect Password")
+
+                    const isPasswordMatch = await bcrypt.compare(
+                        credentials.password,
+                        user.password
+                    );
+
+                    if (!isPasswordMatch) {
+                        throw new Error("Incorrect password");
                     }
+
+                    return {
+                        id: user._id.toString(),
+                        email: user.email,
+                        username: user.username,
+                        isVerified: user.isVerified,
+                        isAcceptingMessage: user.isAcceptingMessage
+                    };
                 } catch (error: any) {
-                    throw new Error(error.message)
+                    throw new Error(error.message);
                 }
             }
         })
     ],
     callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token._id = user.id;
+                token.isVerified = user.isVerified;
+                token.isAcceptingMessage = user.isAcceptingMessage;
+                token.username = user.username;
+            }
+            return token;
+        },
         async session({ session, token }) {
-            if (token) {
+            if (token && session.user) {
                 session.user._id = token._id;
                 session.user.isVerified = token.isVerified;
                 session.user.isAcceptingMessage = token.isAcceptingMessage;
                 session.user.username = token.username;
             }
-
             return session;
-        },
-        async jwt({ token, user }) {
-            if (user) {
-                token._id = user._id?.toString();
-                token.isVerified = user.isVerified;
-                token.isAcceptingMessage = user.isAcceptingMessage;
-                token.username = user.username;
-            }
-            return token
         }
     },
     pages: {
@@ -69,4 +85,4 @@ export const authOptions: NextAuthOptions = {
         strategy: "jwt"
     },
     secret: process.env.NEXTAUTH_SECRET
-}
+};
