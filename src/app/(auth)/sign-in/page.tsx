@@ -61,7 +61,8 @@ export default function SignInForm() {
       }
 
       if (result.ok) {
-        router.replace("/dashboard");
+        await router.replace("/dashboard");
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error occurred while signing in", error);
