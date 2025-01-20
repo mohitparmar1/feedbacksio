@@ -50,8 +50,8 @@ export async function GET(request: Request) {
 
         return Response.json({
             success: true,
-            messages: "messages retrived successfully",
-            data: user[0].message
+            message: "messages retrived successfully",
+            messages : user[0].message
         }, {
             status: 200
         })
