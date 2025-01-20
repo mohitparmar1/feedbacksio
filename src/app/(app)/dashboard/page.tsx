@@ -1,3 +1,4 @@
+"use client";
 import { toast, useToast } from "@/hooks/use-toast";
 import { Message } from "@/model/User.Modal";
 import { messageSchema } from "@/schemas/messageSchema";
