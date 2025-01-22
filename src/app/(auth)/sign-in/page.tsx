@@ -24,7 +24,7 @@ export default function SignInForm() {
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: "",
+      identifier: "",
       password: "",
     },
   });
@@ -34,10 +34,11 @@ export default function SignInForm() {
     try {
       const result = await signIn("credentials", {
         redirect: false,
-        email: data.email,
+        identifier: data.identifier,
         password: data.password,
       });
 
+      console.log("Sign-in result:", result);
       if (!result) {
         toast({
           title: "Sign In Failed",
@@ -61,8 +62,7 @@ export default function SignInForm() {
       }
 
       if (result.ok) {
-        await router.replace("/dashboard");
-        window.location.reload();
+        router.replace("/dashboard");
       }
     } catch (error) {
       console.error("Error occurred while signing in", error);
