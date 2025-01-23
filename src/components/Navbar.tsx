@@ -13,7 +13,7 @@ function Navbar() {
   return (
     <nav className="p-2 md:p-3 shadow-md mt-3 bg-black-primary rounded-md text-white mx-10">
       <div className="container mx-auto flex flex-row md:flex-row justify-between items-center">
-        <a href="#" className="text-sm md:text-lg font-bold mb-4 md:mb-0">
+        <a href="/" className="text-sm md:text-lg font-bold mb-4 md:mb-0">
           Seekfeedback
         </a>
         {session ? (
