@@ -1,5 +1,4 @@
 "use client";
-import { toast, useToast } from "@/hooks/use-toast";
 import { Message } from "@/model/User.Modal";
 import { messageSchema } from "@/schemas/messageSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,25 +8,22 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ApiResponse } from "@/types/ApiResponse";
 import { User } from "next-auth";
-import MessageCard from "@/components/MessageCard";
+import { MessageCard } from "@/components/MessageCard";
 import { Loader2, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
 
 function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
 
-  const { taost } = useToast;
+  const { toast } = useToast();
 
   const handleDeleteMessage = (messageId: string) => {
-    setMessages(
-      messages.filter((message) => {
-        message._id !== messageId;
-      })
-    );
+    setMessages(messages.filter((message) => message._id !== messageId));
   };
 
   const { data: session } = useSession();
@@ -58,16 +54,16 @@ function UserDashboard() {
     } finally {
       setIsLoading(false);
     }
-  }, [setValue]);
+  }, [setValue, toast]);
 
   const fetchMessage = useCallback(
     async (refresh: boolean = false) => {
       setIsLoading(true);
       setIsSwitchLoading(true);
       try {
-        const response = axios.get<ApiResponse>("/api/get-messages");
+        const response = await axios.get<ApiResponse>("/api/get-messages");
 
-        setMessages((await response).data.messages || []);
+        setMessages(response.data.messages || []);
 
         if (refresh) {
           toast({
@@ -87,7 +83,7 @@ function UserDashboard() {
         setIsLoading(false), setIsSwitchLoading(false);
       }
     },
-    [setIsLoading, setMessages]
+    [setIsLoading, setMessages, toast]
   );
 
   useEffect(() => {
@@ -95,7 +91,9 @@ function UserDashboard() {
 
     fetchAcceptMessages();
     fetchMessage();
-  }, [session, setValue, fetchMessage, fetchAcceptMessages]);
+  }, [session, setValue, fetchMessage, fetchAcceptMessages, toast]);
+
+  console.log("messages", messages);
 
   const handleSwitchChange = async () => {
     try {
@@ -181,6 +179,19 @@ function UserDashboard() {
           <RefreshCcw className="h-4 w-4" />
         )}
       </Button>
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {messages.length > 0 ? (
+          messages.map((message, index) => (
+            <MessageCard
+              key={message._id}
+              message={message}
+              onMessageDelete={handleDeleteMessage}
+            />
+          ))
+        ) : (
+          <p>No messages to display.</p>
+        )}
+      </div>
     </div>
   );
 }
