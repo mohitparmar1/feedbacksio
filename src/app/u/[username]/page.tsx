@@ -91,7 +91,7 @@ function SendMessage() {
 
       toast({
         title: "Error",
-        description: error.message || "Failed to fetch suggested messages.",
+        description:"Failed to fetch suggested messages.",
         variant: "destructive",
       });
     } finally {
