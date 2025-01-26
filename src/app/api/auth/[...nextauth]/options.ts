@@ -1,8 +1,17 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from "@/lib/dbConnect";
-import { UserModel } from "@/model/User.Modal";
 import bcrypt from "bcryptjs";
+import { UserModel } from "@/model/User.Modal";
+
+interface IUser {
+    _id: string;
+    email: string;
+    username: string;
+    password: string;
+    isVerified: boolean;
+    isAcceptingMessage: boolean;
+}
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -26,7 +35,7 @@ export const authOptions: NextAuthOptions = {
                             { email: credentials.identifier },
                             { username: credentials.identifier }
                         ]
-                    });
+                    }) as IUser | null;
 
                     if (!user) {
                         throw new Error("No user found with this email");
@@ -46,7 +55,7 @@ export const authOptions: NextAuthOptions = {
                     }
 
                     return {
-                        id: user._id.toString(),
+                        _id: user._id.toString(),
                         email: user.email,
                         username: user.username,
                         isVerified: user.isVerified,

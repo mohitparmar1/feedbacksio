@@ -14,7 +14,7 @@ export async function DELETE(request: Request, { params }: { params: { messageId
         return Response.json({ success: false, message: 'Not authenticated' },
             { status: 401 })
     }
-    const user = session.user as User
+    const user = session.user
     try {
         const updateResult = await UserModel.updateOne({
             _id: user._id
