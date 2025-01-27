@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
     try {
         const user = await UserModel.aggregate([
-            { $match: { _id: new mongoose.Types.ObjectId(userId) } }, // Match the user by ID
+            { $match: { _id: userId } }, // Match the user by ID
             {
                 $project: {
                     _id: 1,
