@@ -55,40 +55,46 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
+    // Connect to the database
     await dbConnect();
 
-    const session = await getServerSession(authOptions)
-
+    // Get the user session
+    const session = await getServerSession(authOptions);
     const user = session?.user;
 
-    if (!session && !user) {
-        return Response.json({
-            success: false,
-            message: "not authenticated"
-        }, { status: 401 })
+    // Check if the user is authenticated
+    if (!session || !user) {
+        return Response.json(
+            { success: false, message: 'Not authenticated' },
+            { status: 401 }
+        );
     }
 
     try {
-
-        const foundUser = await UserModel.findById(user?._id)
+        // Retrieve the user from the database using the ID
+        const foundUser = await UserModel.findById(user._id);
 
         if (!foundUser) {
-            return Response.json({
-                success: false,
-                message: "user not found"
-            }, { status: 401 })
+            // User not found
+            return Response.json(
+                { success: false, message: 'User not found' },
+                { status: 404 }
+            );
         }
 
-        return Response.json({
-            success: true,
-            isAcceptingMessage: foundUser.isAcceptingMessage,
-        }, { status: 200 })
-
-    } catch (error) {
-        console.error("error retrieving message acceptance status", error)
+        // Return the user's message acceptance status
         return Response.json(
-            { success: false, message: 'Error while retrieving message acceptance status' },
-            { status: 501 }
+            {
+                success: true,
+                isAcceptingMessages: foundUser.isAcceptingMessage,
+            },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error('Error retrieving message acceptance status:', error);
+        return Response.json(
+            { success: false, message: 'Error retrieving message acceptance status' },
+            { status: 500 }
         );
     }
 }
