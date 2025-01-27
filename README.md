@@ -1,6 +1,32 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# feedbacksio
+Description: send anonymous feedback to user 
 
-## Getting Started
+## Tech Stack :
+ - Nextjs
+ - Tailwind Css
+ - Next-Auth
+ - MongoDB 
+
+## features :
+ 1. Login
+ 2. Sign-up
+ 3. Dashboard
+ 4. Send Messages
+
+## Home Page 
+![Screenshot 2025-01-27 173457](https://github.com/user-attachments/assets/4abd274c-cce3-490c-9ab2-9747169c1a94)
+
+## Login Page 
+![Screenshot 2025-01-27 173508](https://github.com/user-attachments/assets/bf043897-22b7-419d-a2b1-aa08b596b82d)
+
+## Dashboard Page 
+![Screenshot 2025-01-25 153958](https://github.com/user-attachments/assets/a258c668-c0d2-4945-856c-a8274ba3902b)
+
+## Send Message 
+![Screenshot 2025-01-27 173610](https://github.com/user-attachments/assets/1bf79396-e1fa-4da5-9bdc-d0a8747a9b82)
+
+
+ Getting Started
 
 First, run the development server:
 
@@ -15,22 +41,3 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
